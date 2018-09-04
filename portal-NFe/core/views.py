@@ -21,8 +21,8 @@ def login(request):
             auth_login(request, user)
             return HttpResponseRedirect(reverse('index'))
         else:
-            context = {'erro':{ 'text':'Usuario ou senha invalidos!',
-                                'type':'danger',  }}
+            context.append( {'erro':{ 'text':'Usuario ou senha invalidos!',
+                                'type':'danger',  }})
 
     return  render(request, 'login.html', context )
 
@@ -43,10 +43,20 @@ def settings(request, name):
         email      = request.POST.get('email')
         first_name = request.POST.get('first_name')
         last_name  = request.POST.get('last_name')
+        check      = request.POST.get('check')
+        print (check)
+        password_n = request.POST.get('new_password')
+        password_c = request.POST.get('confirm_password')
+
+
 
         return  render(request, 'settings.html', context)
 
     return render(request, 'settings.html', context)
 
 
-
+def validate_new_password(password_n, password_c):
+    if password_n is not None and password_c is not Node:
+        if password_n == password_c:
+            return true
+    return false
