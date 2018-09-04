@@ -30,6 +30,10 @@ def logout(request):
     auth_logout(request)
     return render(request, 'login.html')
 
+def signup(request):
+
+    return render(request, 'signup.html')
+
 @login_required
 def settings(request, name):
     context = {}
@@ -53,7 +57,6 @@ def settings(request, name):
         return  render(request, 'settings.html', context)
 
     return render(request, 'settings.html', context)
-
 
 def validate_new_password(password_n, password_c):
     if password_n is not None and password_c is not Node:
