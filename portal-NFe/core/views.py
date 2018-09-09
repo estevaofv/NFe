@@ -2,7 +2,7 @@ from django.contrib.auth            import authenticate, login as auth_login, lo
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models     import User
 from django.shortcuts               import render
-from django.http                    import HttpResponse, HttpResponseRedirect, Http404
+from django.http                    import HttpResponse, HttpResponseRedirect, Http404, JsonResponse
 from django.urls                    import reverse
 
 def index(request):
@@ -21,8 +21,8 @@ def login(request):
             auth_login(request, user)
             return HttpResponseRedirect(reverse('index'))
         else:
-            context.append( {'erro':{ 'text':'Usuario ou senha invalidos!',
-                                'type':'danger',  }})
+            context['erro'] ={'text':'Usuario ou senha invalidos!',
+                              'type':'danger'}
 
     return  render(request, 'login.html', context )
 
@@ -31,7 +31,6 @@ def logout(request):
     return render(request, 'login.html')
 
 def signup(request):
-
     return render(request, 'signup.html')
 
 @login_required
@@ -48,18 +47,27 @@ def settings(request, name):
         first_name = request.POST.get('first_name')
         last_name  = request.POST.get('last_name')
         check      = request.POST.get('check')
-        print (check)
         password_n = request.POST.get('new_password')
         password_c = request.POST.get('confirm_password')
-
-
 
         return  render(request, 'settings.html', context)
 
     return render(request, 'settings.html', context)
 
-def validate_new_password(password_n, password_c):
-    if password_n is not None and password_c is not Node:
-        if password_n == password_c:
-            return true
-    return false
+def validate_settings(request):
+    username = request.GET.get('username')
+
+
+
+    data = {
+        'first_name':'',
+        'last_name':'',
+        'username': User.objects.filter(username__iexact=username).exists(),
+        'new_password':'',
+        'current password':'',
+    }
+
+    if data['is_taken']:
+        data['error_message'] = 'A user with this username already exists.' \
+                                ''
+    return JsonResponse(data)
