@@ -46,12 +46,12 @@
             </div>
         </div>
         <div class="col-md-3 mb-3">
-            <label for="validationCustom04">Nova senha</label>
-            <input type="text" class="form-control" id="validationCustom04" placeholder="Nova senha" required>
+            <label for="nova_senha">Nova senha</label>
+            <input type="password" class="form-control" id="nova_senha" placeholder="Nova senha" required>
         </div>
         <div class="col-md-3 mb-3">
-            <label for="validationCustom05">Confirmar senha</label>
-            <input type="text" class="form-control" id="validationCustom05" placeholder="Confirmar senha" required>
+                <label for="confirmar_senha">Confirmar senha</label>
+            <input type="password" class="form-control" id="confirmar_senha" placeholder="Confirmar senha" required>
             <div class="invalid-feedback"> As senhas precisam ser identicas! </div>
         </div>
     </div>
@@ -69,6 +69,16 @@
 {% block scripts %}
     {{ block.super }}
     <script>
+        function validate_password(){
+            var nSenha = document.getElementById('nova_senha').value
+            var cSenha = document.getElementById('confirmar_senha').value
+
+            if(nSenha.length >= 7 && nSenha === cSenha)
+                return true;
+
+            return false;
+        }
+
         (function() {
             'use strict';
             window.addEventListener('load', function() {
