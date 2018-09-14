@@ -54,20 +54,12 @@ def settings(request, name):
 
     return render(request, 'settings.html', context)
 
-def validate_settings(request):
+def validate_username(request):
     username = request.GET.get('username')
 
-
-
-    data = {
-        'first_name':'',
-        'last_name':'',
-        'username': User.objects.filter(username__iexact=username).exists(),
-        'new_password':'',
-        'current password':'',
-    }
+    data = { 'is_taken': User.objects.filter(username__iexact=username).exists() }
 
     if data['is_taken']:
-        data['error_message'] = 'A user with this username already exists.' \
-                                ''
+        data['error_message'] = 'Username já existe!'
+
     return JsonResponse(data)
