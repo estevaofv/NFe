@@ -1,44 +1,36 @@
-import html.parser
-from html.parser import HTMLParser
+import bs4
+from bs4 import BeautifulSoup
 import urllib
 from urllib.request import urlopen
+import re
 
-page = '\''
-
-class ParserNotas(HTMLParser):
-	site = ''
-	inTag = False
-	areItem = False
-
-	def handle_starttag(self, tag, attrs):
-		if tag == 'iframe':
-			for names, value in attrs:
-				if names == 'src':
-					self.site = page + value + page
-					#print (self.site)
-
-
-		if tag == 'td':
-			for names, value in attrs:
-				if names == 'class' and value == 'NFCDetalhe_Item':
-					self.areItem = True
-					#print ('achei')
-				if names == 'style' and value == 'width: 300px;' and self.areItem:	
-					self.inTag = True
-					print ('achei o item') #Como pegar o conteúdo da Tag?
-
-	def handle_endtag(self, tag):
-		if tag == 'td':
-			self.inTag = False
-
-	def handle_data(self, data):
-		if self.inTag:
-			print (data)
-		
-p = ParserNotas()
+#Abertura do arquivo HTML, teste estático
 doc = urlopen('https://www.sefaz.rs.gov.br/NFCE/NFCE-COM.aspx?chNFe=43180387397865001940652080000042681261512136&').read()
-p.feed(doc.decode('utf-8'))
+doc = doc.decode('utf-8')
 
-pageNFe = ParserNotas()
-doc = urlopen('https://www.sefaz.rs.gov.br/ASP/AAE_ROOT/NFE/SAT-WEB-NFE-NFC_QRCODE_1.asp?chNFe=43180387397865001940652080000042681261512136&').read()
-pageNFe.feed(doc.decode('iso-8859-1'))
+#Criação do BeatifulSoup object, formata o HTML
+soup = BeautifulSoup(doc, 'html.parser')
+
+#Pega o link onde estão os arquivos de notas fiscais
+link = soup.iframe['src']
+
+#Abertura do arquivo HTML obtido acima
+doc = urlopen(link).read()
+doc = doc.decode('iso-8859-1')
+
+#Criação do BS object
+soup = BeautifulSoup(doc, 'html.parser')
+
+#Encontra o conteúdo das tags que contém o nome do produto, sobrescrita proposital
+count = 0
+for tag in soup.find_all('td', class_='NFCDetalhe_Item', style='width: 300px;'):
+	product = tag.string
+	print(product)
+
+#Encontra o preço de cada produto especificado na nota, sobrescrita proposital
+for tag in soup.find_all('tr', id=re.compile("Item +")):
+	for child in tag.find_all('td', class_='NFCDetalhe_Item', style='width: 70px;'):
+		count = count + 1
+		if (count % 2 == 1):
+			price = child.string
+			print(price)
