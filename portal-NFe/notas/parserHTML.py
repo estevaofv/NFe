@@ -34,3 +34,21 @@ for tag in soup.find_all('tr', id=re.compile("Item +")):
 		if (count % 2 == 1):
 			price = child.string
 			print(price)
+
+
+def getProducts(chave):
+    url = "https://www.sefaz.rs.gov.br/NFCE/NFCE-COM.aspx?chNFe=" + chave + "&"
+    doc = urlopen(url).read().decode('utf-8')
+    soup = BeautifulSoup(doc, 'html.parser')
+    link = soup.iframe['src']
+    doc = urlopen(link).read().decode('iso-8859-1')
+    soup = BeautifulSoup(doc, 'html.parser')
+
+    for tag in soup.find_all('tr', id=re.compile("Item +")):
+        for child in tag.find_all('td', class_='NFCDetalhe_Item'):
+            print (child)
+
+
+
+
+    return
