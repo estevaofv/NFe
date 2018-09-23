@@ -25,7 +25,7 @@ soup = BeautifulSoup(doc, 'html.parser')
 count = 0
 for tag in soup.find_all('td', class_='NFCDetalhe_Item', style='width: 300px;'):
 	product = tag.string
-	sprint(product)
+	print(product)
 
 #Encontra o preço de cada produto especificado na nota, sobrescrita proposital
 for tag in soup.find_all('tr', id=re.compile("Item +")):
@@ -45,6 +45,12 @@ for father in soup.find_all('tr', id=re.compile("Item +")):
         unity = tag.string
         print(unity)
 
+for tag in soup.find('td', class_='NFCCabecalho_SubTitulo1'):
+    list = tag.string
+    cnpj = list[55:72]
+    print('CNPJ: ', cnpj)
+
+
 def getProducts(chave):
     url = "https://www.sefaz.rs.gov.br/NFCE/NFCE-COM.aspx?chNFe=" + chave + "&"
     doc = urlopen(url).read().decode('utf-8')
@@ -56,9 +62,5 @@ def getProducts(chave):
     for tag in soup.find_all('tr', id=re.compile("Item +")):
         for child in tag.find_all('td', class_='NFCDetalhe_Item'):
             print (child)
-    
-
-
-
     
     return
