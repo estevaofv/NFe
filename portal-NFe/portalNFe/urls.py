@@ -26,6 +26,6 @@ urlpatterns = [
     path('signup/', signup, name='signup'),
     path('settings/<str:name>', settings, name='settings'),
 
-    #path('validate_settings', validate_settings, name='validate_settings'),
+    path('validate_settings', validate_settings, name='validate_settings'),
 
 ]

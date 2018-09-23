@@ -2,6 +2,8 @@ from django.db import models
 
 class Estabelecimento(models.Model):
     cnpj   = models.CharField('CNPJ',   max_length=18, blank=False, unique=True)
+    nome   = models.CharField('Nome',   max_length=40, blank=False)
+    email  = models.EmailField('Email', max_length=40, blank=False)
     rua    = models.CharField('Rua',    max_length=40, blank=False)
     numero = models.CharField('Número', max_length=40, blank=False)
     bairro = models.CharField('Bairro', max_length=40, blank=False)
