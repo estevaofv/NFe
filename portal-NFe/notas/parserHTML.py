@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import urllib
 from urllib.request import urlopen
 import re
+import json
 
 #Abertura do arquivo HTML, teste estático
 doc = urlopen('https://www.sefaz.rs.gov.br/NFCE/NFCE-COM.aspx?chNFe=43180387397865001940652080000042681261512136&').read()
@@ -13,6 +14,7 @@ soup = BeautifulSoup(doc, 'html.parser')
 
 #Pega o link onde estão os arquivos de notas fiscais
 link = soup.iframe['src']
+print (link)
 
 #Abertura do arquivo HTML obtido acima
 doc = urlopen(link).read()
@@ -49,18 +51,3 @@ for tag in soup.find('td', class_='NFCCabecalho_SubTitulo1'):
     list = tag.string
     cnpj = list[55:72]
     print('CNPJ: ', cnpj)
-
-
-def getProducts(chave):
-    url = "https://www.sefaz.rs.gov.br/NFCE/NFCE-COM.aspx?chNFe=" + chave + "&"
-    doc = urlopen(url).read().decode('utf-8')
-    soup = BeautifulSoup(doc, 'html.parser')
-    link = soup.iframe['src']
-    doc = urlopen(link).read().decode('iso-8859-1')
-    soup = BeautifulSoup(doc, 'html.parser')
-
-    for tag in soup.find_all('tr', id=re.compile("Item +")):
-        for child in tag.find_all('td', class_='NFCDetalhe_Item'):
-            print (child)
-    
-    return

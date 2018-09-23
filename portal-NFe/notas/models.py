@@ -22,7 +22,6 @@ class Nota(models.Model):
     numero = models.CharField('Número da NF-e', max_length=9)
     data   = models.DateField('Data de Emissão')
     xml    = models.BinaryField('XML NF-e', blank=True)
-    #xml    = models.FileField('XML NF-e', blank=True)
     cnpj   = models.ForeignKey(Estabelecimento, on_delete=models.CASCADE)
 
     class Meta:
