@@ -2,6 +2,7 @@ import bs4
 import urllib
 import re
 import json
+import sys
 
 from bs4 import BeautifulSoup
 from urllib.request import urlopen
@@ -36,19 +37,25 @@ def getEmpresa(cnpj):
 def getProdutosComQRCode(url):
     link = BeautifulSoup(urlopen(url).read().decode('utf-8'), 'html.parser').iframe['src']
     doc = urlopen(link).read().decode('iso-8859-1')
+    if doc == "":
+        sys.exit()
     soup = BeautifulSoup(doc, 'html.parser')
 
     data = {}
 
-    cnpj = soup.find('td', class_='NFCCabecalho_SubTitulo1').string[55:73]
-    data['empresa'] =    getEmpresa(cnpj)
+    try:
+        cnpj = soup.find('td', class_='NFCCabecalho_SubTitulo1').string[55:73]
+        data['empresa'] =    getEmpresa(cnpj)
 
-    data['produtos'] = {}
+        data['produtos'] = {}
 
-    for tag in soup.find_all('tr', id=re.compile("Item +")):
-        produto = []
-        for child in tag.find_all('td', class_='NFCDetalhe_Item'):
-            produto.append(child.string)
-        data['produtos'][tag['id']] = produto
+        for tag in soup.find_all('tr', id=re.compile("Item +")):
+            produto = []
+            for child in tag.find_all('td', class_='NFCDetalhe_Item'):
+                produto.append(child.string)
+            data['produtos'][tag['id']] = produto
 
-    return data
+        return data
+    except:
+        e = sys.exc_info()[0]
+        print('Error founded', e)
