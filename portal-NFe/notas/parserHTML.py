@@ -27,6 +27,22 @@ doc = doc.decode('iso-8859-1')
 #Criação do BS object
 soup = BeautifulSoup(doc, 'html.parser')
 
+#Pegar Data
+countN = 0
+tax = 0
+for tag in soup.find_all('table', border="0", style="width: 100%;"):
+    for child in tag.find('td', class_="NFCCabecalho_SubTitulo"):
+        list = child.string
+        for i in list:
+            tax = tax + 1
+            if i == '\n':
+                countN = countN + 1
+            if countN == 3:
+                date = list[tax+41:tax+51] #Localização da data na linha, não muda a posição e com o tax permite manipulação em casos de variáveis menores
+                print(date)
+                exit() #Substituido por return em função
+
+
 #Encontra o conteúdo das tags que contém o nome do produto, sobrescrita proposital
 count = 0
 try:
