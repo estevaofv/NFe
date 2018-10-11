@@ -12,7 +12,7 @@ A leitura é feita com base em notas fiscais eletrônicas, digitando o código �
 
 A pesquisa é feita buscando o nome do produto desejado, tendo como retorno o melhor valor possível dele e o supermercado onde ele está com esse preço.
 
-(Aqui)[https://nfsearch.herokuapp.com/] o site da aplicação web.
+[Aqui](https://nfsearch.herokuapp.com/) o site da aplicação web.
 
 ## Qual o objetivo do aplicativo?
 
